@@ -18,6 +18,15 @@
 			{{d3js}}
 			{{custom_js}}
 
+			function removeOptions(selectbox)
+			{
+			    var i;
+			    for(i = selectbox.options.length - 1 ; i >= 0 ; i--)
+			    {
+			        selectbox.remove(i);
+			    }
+			}
+
 			function updateSharedParameters(){
 				var shared_params = "";
 				{% for input in inputs -%}
@@ -115,6 +124,16 @@
 							break;
 						}
 					};
+				}else if(type=="dropdown-options"){
+				        select = document.getElementById(key);
+					removeOptions(select);
+					json = JSON.parse(value.replace(/'/g,"\""));
+					for(var i = 0; i < json.length; i++){
+						var option = document.createElement('option');
+        					option.text = json[i].label;
+						option.value = json[i].value;
+        					select.add(option, 0);
+					}
 				}else if(type=="slider"){
 					document.getElementById(key).value=value;
 					document.getElementById(key+"_value").value=value;
